@@ -76,15 +76,30 @@ install(
 # errors, style issues, and other discrepancies that do not adhere to
 # specified coding standards or best practices.
 if(BUILD_TESTING)
-  #find_package(ament_lint_auto REQUIRED)
+  # Find required test packages
+  find_package(ament_lint_auto REQUIRED)
   find_package(ament_cmake_pytest REQUIRED)
+  find_package(ament_cmake_gtest REQUIRED)
+   
+  # Python tests
+  ament_add_pytest_test(minimal_publisher_test test/pytest/test_publisher.py
+    TIMEOUT 60
+  )
+   
+  # C++ tests
+  ament_add_gtest(cpp_minimal_publisher_test
+    test/gtest/test_publisher.cpp
+  )
+   
+  # Add dependencies for the C++ test executable
+  ament_target_dependencies(cpp_minimal_publisher_test
+    ${dependencies}
+  )
+   
+  # Optional: Enable other linting tools
   #set(ament_cmake_copyright_FOUND TRUE)
   #set(ament_cmake_cpplint_FOUND TRUE)
   #ament_lint_auto_find_test_dependencies()
- 
-  ament_add_pytest_test(minimal_publisher_test test/pytest/test_publisher.py
-   TIMEOUT 60
-  )
 endif()
  
 # Used to export include directories of a package so that they can be easily
